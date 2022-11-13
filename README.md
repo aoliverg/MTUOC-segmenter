@@ -16,6 +16,6 @@ All the files allows to include or not the "<p>" paragraph mark between paragrap
 
 GUI versios of the programs are also provided as a Windows executable files. They can be downloaded from the following links:
 
-* txt2segmentedtext_GUI.py: 
+* txt2segmentedtext_GUI.py: [http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtext_GUI.exe](http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtext_GUI.exe)
 * txt2segmentedtextDirDir_GUI.py: [http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtextDirDir_GUI.exe](http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtextDirDir_GUI.exe)
-* txt2segmentedtextDirFile_GUI.py: 
+* txt2segmentedtextDirFile_GUI.py: [http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtextDirFile_GUI.exe](http://lpg.uoc.edu/MTUOC-segmenter/txt2segmentedtextDirFile_GUI.exe)
