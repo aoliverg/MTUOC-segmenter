@@ -23,27 +23,27 @@ GUI versios of the programs are also provided as a Windows executable files. The
 ## Requirements
   
 Programs are written in Pyhton version 3, and the following requirements are needed:
-  
+```
 nltk
 PyYAML
 regex
-
+```
 A requirements.txt file is provided. The requirements can be installed using:
-  
-``sudo pip3 install -r requirements.txt``
-  
-  or 
-  
-  ``pip install -r requirements.txt``
+```  
+sudo pip3 install -r requirements.txt``
+```  
+or 
+```  
+pip install -r requirements.txt``
   
   depending on your Python 3 installation.
   
   ## Usage
   
   The use is very simple, for the command line versions use the -h option and the help will be show. For example:
-  
-  ``
-  python3 txt2segmentedtext.py -h
+
+```
+python3 txt2segmentedtext.py -h
 usage: txt2segmentedtext.py [-h] -i INPUT_FILE -o OUTPUT_FILE -s SRXFILE -l SRXLANG [-p]
 
 A script to segment all the files in one directory and save the segmented files in another directory.
@@ -59,7 +59,8 @@ optional arguments:
   -l SRXLANG, --srxlang SRXLANG
                         The language as stated in the SRX file
   -p, --paragraph       Add the <p> pararaph mark
-  ``
+```
+    
     
   
   
