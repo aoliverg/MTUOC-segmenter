@@ -35,12 +35,12 @@ sudo pip3 install -r requirements.txt``
 or 
 ```  
 pip install -r requirements.txt``
+```
+depending on your Python 3 installation.
   
-  depending on your Python 3 installation.
+## Usage
   
-  ## Usage
-  
-  The use is very simple, for the command line versions use the -h option and the help will be show. For example:
+The use is very simple, for the command line versions use the -h option and the help will be show. For example:
 
 ```
 python3 txt2segmentedtext.py -h
@@ -61,6 +61,24 @@ optional arguments:
   -p, --paragraph       Add the <p> pararaph mark
 ```
     
+Then, to segment a file you can write (adapting to your file names and to the language):
+    
+```
+python3 txt2segmentedtext.py -i inputfile.txt -o outputfile.txt -s segment.srx -l Spanish
+```
+    
+and if you want to add the paragraph mark write:
+
+```
+python3 txt2segmentedtext.py -i inputfile.txt -o outputfile.txt -s segment.srx -l Spanish -p
+```
+    
+    
+To use the GUI interface, just run the program and a simple GUI inteface will appear, as the following one, for example:
+    
+![](https://github.com/aoliverg/imageswiki/blob/main/txt2segmentedtext.PNG)
+    
+Just complete the information and click the **Segment!** button. 
     
   
   
