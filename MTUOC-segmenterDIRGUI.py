@@ -1,4 +1,4 @@
-#    MTUOC-segmenterDIR
+#    MTUOC-segmenterDIRGUI
 #    Copyright (C) 2023  Antoni Oliver
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,17 @@ import argparse
 import sys
 import codecs
 import os
+
+from tkinter import *
+from tkinter.ttk import *
+
+import tkinter 
+from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import asksaveasfilename
+from tkinter.filedialog import askdirectory
+from tkinter import messagebox
+from tkinter import ttk
+
 
 #SRX_SEGMENTER
 import lxml.etree
@@ -124,7 +135,7 @@ def parse(srx_filepath: str) -> Dict[str, Dict[str, List[Tuple[str, Optional[str
 
     return rules
 
-def segmenta(cadena):
+def segmenta(cadena,rules,srxlang):
     segmenter = SrxSegmenter(rules[srxlang],cadena)
     segments=segmenter.extract()
     resposta=[]
@@ -136,52 +147,92 @@ def segmenta(cadena):
 
 
 
+def translate(segment):
+    return(segment[::-1])
 
-parser = argparse.ArgumentParser(description='A script to segment all the files in one directory and save the segmented files in another directory.')
-parser.add_argument("-i", "--input_dir", type=str, help="The input dir containing the text files to segment", required=True)
-parser.add_argument("-o", "--output_dir", type=str, help="The output dir to save the segmented files. If it doesn't exist, it will be created", required=True)
-parser.add_argument("-s", "--srxfile", type=str, help="The SRX file to use", required=True)
-parser.add_argument("-l", "--srxlang", type=str, help="The language as stated in the SRX file", required=True)
-parser.add_argument("-p", "--paramark", action="store_true", help="Add the <p> paragraph mark (useful for Hunalign).", required=False)
+def select_input_directory():
+    infile = askdirectory(initialdir = ".",title = "Select the input directory.")
+    E1.delete(0,END)
+    E1.insert(0,infile)
+    E1.xview_moveto(1)
+    
+def select_output_directory():
+    infile = askdirectory(initialdir = ".",title = "Select the output directory.")
+    E2.delete(0,END)
+    E2.insert(0,infile)
+    E2.xview_moveto(1)
+
+def select_srx_file():
+    infile = askopenfilename(initialdir = ".",filetypes =(("SRX files","*.srx"),("All Files","*.*")),
+                           title = "Select a SRX file.")
+    E3.delete(0,END)
+    E3.insert(0,infile)
+    E3.xview_moveto(1)
+    rules = parse(infile)
+    languages=list(rules.keys())
+    sorted_languages=sorted(languages)
+    CB4['values'] = sorted_languages
+
+def go():
+    infile=E1.get()
+    outfile=E2.get()
+    srxfile=E3.get()
+    srxlang=CB4.get()
+    paramark=False
+    if var.get()==1:
+        paramark=True
+
+    inDir=E1.get()
+    outDir=E2.get()
+    if not os.path.exists(outDir):
+        os.makedirs(outDir)
+    srxfile=E3.get()
+    srxlang=CB4.get()
+    rules = parse(srxfile)
 
 
-args = parser.parse_args()
-inDir=args.input_dir
-if not inDir.endswith("/") and not inDir.endswith("\\"):
-    inDir=inDir+"/"
-outDir=args.output_dir
-if not outDir.endswith("/") and not outDir.endswith("\\"):
-    outDir=outDir+"/"
-if not os.path.exists(outDir):
-    os.makedirs(outDir)
-srxfile=args.srxfile
-srxlang=args.srxlang
-rules = parse(srxfile)
-
-languages=list(rules.keys())
-
-
-if not srxlang in languages:
-    print("Language ",srxlang," not available in ", srxfile)
-    print("Available languages:",", ".join(languages))
-    sys.exit()
-
-paramark=args.paramark
+    files = []
+    for r, d, f in os.walk(inDir):
+        for file in f:
+            if file.endswith('.txt'):
+                fullpath=os.path.join(r, file)            
+                entrada=codecs.open(fullpath,"r",encoding="utf-8",errors="ignore")
+                outfile=fullpath.replace(inDir,outDir)
+                sortida=codecs.open(outfile,"w",encoding="utf-8")
+                for linia in entrada:
+                    segments=segmenta(linia,rules,srxlang)
+                    if len(segments)>0:
+                        if paramark: sortida.write("<p>\n")
+                        sortida.write(segments+"\n")
 
 
+top = Tk()
+top.title("MTUOC-segmenterDIRGUI")
 
-files = []
-for r, d, f in os.walk(inDir):
-    for file in f:
-        if file.endswith('.txt'):
-            fullpath=os.path.join(r, file)            
-            print(fullpath)
-            entrada=codecs.open(fullpath,"r",encoding="utf-8",errors="ignore")
-            outfile=fullpath.replace(inDir,outDir)
-            print(outfile)
-            sortida=codecs.open(outfile,"w",encoding="utf-8")
-            for linia in entrada:
-                segments=segmenta(linia)
-                if len(segments)>0:
-                    if paramark: sortida.write("<p>\n")
-                    sortida.write(segments+"\n")
+B1=tkinter.Button(top, text = str("Select input directory"), borderwidth = 1, command=select_input_directory,width=18).grid(row=0,column=0)
+E1 = tkinter.Entry(top, bd = 5, width=80, justify="right")
+E1.grid(row=0,column=1)
+
+B2=tkinter.Button(top, text = str("Select output directory"), borderwidth = 1, command=select_output_directory,width=18).grid(row=1,column=0)
+E2 = tkinter.Entry(top, bd = 5, width=80, justify="right")
+E2.grid(row=1,column=1)
+
+B3=tkinter.Button(top, text = str("Select SRX file"), borderwidth = 1, command=select_srx_file,width=18).grid(row=2,column=0)
+E3 = tkinter.Entry(top, bd = 5, width=80, justify="right")
+E3.grid(row=2,column=1)
+
+B4=tkinter.Label(top, text = str("SRX language")).grid(row=3,column=0)
+
+#list_items = tkinter.Variable(value=["Generic","English","Spanish"])
+list_items = []
+CB4 = ttk.Combobox(top, state="readonly", values=list_items)
+CB4.grid(row=3,column=1, sticky="w")
+
+var = tkinter.IntVar()
+CB1 = tkinter.Checkbutton(top, text="Para. <p> mark", variable=var)
+CB1.grid(row=4,column=0)
+
+B4=tkinter.Button(top, text = str("Segment!"), borderwidth = 1, command=go,width=14).grid(sticky="W",row=5,column=0)
+
+top.mainloop()
+

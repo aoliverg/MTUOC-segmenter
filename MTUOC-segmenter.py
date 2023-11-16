@@ -139,7 +139,7 @@ def translate(segment):
     return(segment[::-1])
 
 
-parser = argparse.ArgumentParser(description='A script to segment all the files in one directory and save the segmented files in another directory.')
+parser = argparse.ArgumentParser(description='A script to segment a text file.')
 parser.add_argument("-i", "--input_file", type=str, help="The input file to segment.", required=True)
 parser.add_argument("-o", "--output_file", type=str, help="The output segmented file.", required=True)
 parser.add_argument("-s", "--srxfile", type=str, help="The SRX file to use", required=True)
@@ -158,6 +158,13 @@ paramark=args.paramark
 
 
 rules = parse(srxfile)
+
+languages=list(rules.keys())
+
+if not srxlang in languages:
+    print("Language ",srxlang," not available in ", srxfile)
+    print("Available languages:",", ".join(languages))
+    sys.exit()
 
 entrada=codecs.open(infile,"r",encoding="utf-8",errors="ignore")
 sortida=codecs.open(outfile,"w",encoding="utf-8")
