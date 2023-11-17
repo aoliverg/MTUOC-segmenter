@@ -171,7 +171,8 @@ def select_srx_file():
     E3.xview_moveto(1)
     rules = parse(infile)
     languages=list(rules.keys())
-    CB4['values'] = languages
+    sorted_languages=sorted(languages)
+    CB4['values'] = sorted_languages
 
 def go():
     infile=E1.get()
